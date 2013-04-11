@@ -24,8 +24,8 @@
 #define KEY1 (1<<PA7)
 #define KEY2 (1<<PB1)
 
-#define LEDS_ON  PORTA |= (PORTA &= ~0x3F) | leds[state]
-#define LEDS_OFF PORTA |= (PORTA &= ~0x3F) | leds[0]
+#define LEDS_ON  PORTA = (PORTA &= ~0x3F) | leds[state]
+#define LEDS_OFF PORTA = (PORTA &= ~0x3F) | leds[0]
 
 #define MAX_STATE 6
 
