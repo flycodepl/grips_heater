@@ -46,11 +46,11 @@ unsigned char leds_on = 0;
 
 void init() {
   /* Initializacja przyciskow */
-  // plus
+  // minus
   DDRA  &= ~KEY1;
   PORTA |= KEY1;
 
-  // minus
+  // plus
   DDRB  &= ~KEY2;
   PORTB |= KEY2;
 
@@ -120,8 +120,8 @@ void set_power(void) {
 int main(void) {
   init();
   while(1) {
-    key_press(&key1_lock, &PINA, KEY1, plus);
-    key_press(&key2_lock, &PINB, KEY2, minus);
+    key_press(&key1_lock, &PINA, KEY1, minus);
+    key_press(&key2_lock, &PINB, KEY2, plus);
     render_leds();
   };
 };
