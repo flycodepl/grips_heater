@@ -66,6 +66,21 @@ void init() {
   power_off();
 };
 
+void self_test(void) {
+  int test_state[7] = {0x0, 0x1, 0x2, 0x4, 0x8, 0x10, 0x20};
+  for(int i=0; i<=MAX_STATE; i++) {
+    PORTA = (PORTA &= ~0x3F) | test_state[i];
+    _delay_ms(100);
+  };
+  for(int i=MAX_STATE; i>=0; i--) {
+    PORTA = (PORTA &= ~0x3F) | test_state[i];
+    _delay_ms(100);
+  };
+  PORTA |= 0x3F;
+  _delay_ms(500);
+  PORTA = (PORTA &= ~0x3F);
+};
+
 void power_on(void) {
   TCCR1A |= (1<<COM1A1);
   PORTA |= (1<<PA6);
@@ -119,6 +134,7 @@ void set_power(void) {
 
 int main(void) {
   init();
+  self_test();
   while(1) {
     key_press(&key1_lock, &PINA, KEY1, minus);
     key_press(&key2_lock, &PINB, KEY2, plus);
