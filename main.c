@@ -33,6 +33,7 @@ int leds[7] = {0x0, 0x1, 0x3, 0x7, 0xF, 0x1F, 0x3F};
 unsigned char state = 0;
 int time = 0;
 unsigned char leds_on = 0;
+unsigned char saved = 1;
 
 /* attiny44 prescaler (page 84)
    CS02 CS01 CS00
@@ -79,6 +80,27 @@ void self_test(void) {
   PORTA |= 0x3F;
   _delay_ms(500);
   PORTA = (PORTA &= ~0x3F);
+  _delay_ms(500);
+};
+
+void save(unsigned char value) {
+  eeprom_busy_wait();
+  eeprom_write_byte(sizeof(value), value);
+};
+
+unsigned char read(void) {
+  eeprom_busy_wait();
+  return eeprom_read_byte(sizeof(unsigned char));
+};
+
+void restore_state(void) {
+  unsigned char init_state = read();
+  if (init_state < 0 || init_state > 6) {
+    state = 1;
+  } else {
+    state = init_state;
+  };
+  set_power();
 };
 
 void power_on(void) {
@@ -121,6 +143,10 @@ void render_leds(void) {
     time = 10;
     leds_on = 1;
   } else if(time == 0 && leds_on == 1) {
+    if(saved == 0) {
+      save(state);
+      saved=1;
+    };
     LEDS_OFF;
     time = 90;
     leds_on = 0;
@@ -129,12 +155,16 @@ void render_leds(void) {
 };
 
 void set_power(void) {
+  saved = 0;
+  if(state == 0)      power_off();
+  else if(state >= 1)  power_on();
   OCR1A=state*43;
 };
 
 int main(void) {
   init();
   self_test();
+  restore_state();
   while(1) {
     key_press(&key1_lock, &PINA, KEY1, minus);
     key_press(&key2_lock, &PINB, KEY2, plus);
