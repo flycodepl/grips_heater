@@ -20,7 +20,7 @@ R5,R6       - 220Ohm
 ![pcb] (https://raw.github.com/flycodepl/grips_heater/master/eagle_schema/pcb.png)
 
 ## Uwagi i błędy:
-Jest kilka szczegułów które wyszły w trakcie składania i nie chciało mi się już nanosić tego na schemat.
+Jest kilka szczegółów które wyszły w trakcie składania i nie chciało mi się już nanosić tego na schemat.
 
 * Zaraz za stabilizatorem należy dać kondensator elektrolityczny ponieważ bez niego na wyjściu PWM pod czas stanu wysokiego pojawiają się 'szpilki' (tylko kiedy diody są w stanie 'standby'). Ja dałem 10uF 25V + 47uF 10V. Można dać jeden większy ale trzeba pilnować żeby całość zmieściła się w obudowie. W przyszłości dam go na samej płytce.
 
